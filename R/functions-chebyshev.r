@@ -1,65 +1,50 @@
-## library(devtools)
-## library(roxygen2)
-## library(testthat)
-##
-## Build and Reload Package:  'Ctrl + Shift + B'
-## Check Package:             'Ctrl + Shift + E'
-## Test Package:              'Ctrl + Shift + T'
-## Document:                  'Ctrl + Shift + D'
 
-
-##
-#' @title Scaling of X-Axis (as vector or as scalar) to [-1,1]
-#' @param x_axis urspruengliche beliebige X-Achse (Vektor)
-#' @param x_val Einzelwert auf X-Achse (Skalar)
-#' @return x_cheb_scaled Abhaengig von Eingangsparametern: Skalierte X-Achse (Vektor) oder skalierter Einzelwert anhand vorgegebener X-Achse
+#' @title Scaling of X-Axis to [-1,1]
+#' @param x_axis Arbitrary x-axis
+#' @param x_val Single value in range of x_axis
+#' @return Depending on input parameters: Either scaled x-axis or scaled scalar 
+#'   value
 #' @description
-#' \code{cheb_scale} skaliert beliebige X-Achse auf Achse, die fuer Polynom-fits vertraeglich ist.
+#' \code{cheb_scale} scales an arbitrary x-axis to the range [-1, 1], so it can 
+#'   be used for a Chebyshev polynomial, which is defined on this span.
 #' @export
-cheb_scale <- function(x_axis, x_val = NA) {#, scale) {
-  ## Funktion zur Skalierung von Stuetzpunkten
-  ## von beliebigen Gittern auf [-1, 1]
-  ## ##
-  if ( is.na(x_val) == TRUE ) { # Fuer Skalierung von vektoriellen Achsen
+cheb_scale <- function(x_axis, x_val = NA) {
+  if ( is.na(x_val) == TRUE ) {
     x_cheb_scaled <- 2 * (x_axis - min(x_axis)) / (max(x_axis) - min(x_axis)) - 1
   }
-  if ( is.na(x_val) == FALSE ) { # Fuer Skalierung von Einzelwert(en) auf Achse
+  if ( is.na(x_val) == FALSE ) {
     x_cheb_scaled <- 2 * (x_val - min(x_axis)) / (max(x_axis) - min(x_axis)) - 1
   }
   return(x_cheb_scaled)
 }
 
 
-##
-#' @title Rescaling of X-Axis (as vector or as scalar)
-#' @param x_cheb skalierte X-Achse (Skalar oder Vektor)
-#' @param x_axis beliebige X-Achse (Vektor)
-#' @return x_rescaled reskalierte X-Achse (Skalar oder Sektor)
+#' @title Rescaling of X-Axis to Original X-Axis
+#' @param x_cheb Scaled x-axis
+#' @param x_axis Unscaled x-axis
+#' @return Rescaled x-axis
 #' @description
-#' cheb_rescale reskaliert die fuer den Fit erzeugte Achse auf die Urspruengliche
+#' \code{cheb_rescale} rescales (single or multiple) values in the range [-1,1] 
+#' to the original x-axis.
 #' @export
 cheb_rescale <- function(x_cheb, x_axis) {
-  ## Funktion zur Reskalierung vom [-1, 1]-Gitter
-  ## auf das Ursprungsgitter (in diesem Fall - Lat)
   x_rescaled <- (1/2 * (x_cheb + 1) * (max(x_axis) - min(x_axis))) + x_axis[1]
   return(x_rescaled)
 }
 
 
-##
 #' @title Generating Chebyshev Polynomials of first kind
-#' @param x_axis beliebige X-Achse (Vektor)
-#' @param n Ordnung des Polynoms (Skalar)
-#' @return cheb_t Chebyshev-Polynome Erster Art (Vektor)
+#' @param x_axis Arbitrary x-axis
+#' @param n Order of the polynomial
+#' @return Chebyshev polynomial of the first kind
 #' @description
-#' cheb_1st erzeugt Chebyshev Polynome erster Art aus beliebiger X-Achse
+#' \code{cheb_1st} generates Chebyshev polynomials of the first kind of the 
+#'   order n from an arbitrary x-axis. Recurrence formula is taken from 
+#'   Bronstein p.xxx.
 #' @export
 cheb_1st <- function(x_axis, n){
-  ## Funktion zur Erzeugung von Chebyshev-Polynomen Erster Art
-  ## ## Fehlerabfrage nur mit Schwellwert. Korrigieren! Auch cheb_2nd
-  x_cheb <- if (length(x_axis) > 7) cheb_scale(x_axis) else x_axis
+  x_cheb <- cheb_scale(x_axis)
   m <- n + 1
-  # Rekursionsformel Wiki / Bronstein
   cheb_t_0 <- 1;  cheb_t_1 <- x_cheb;
   cheb_t <- cbind(cheb_t_0, cheb_t_1)
   if (n >= 2) {
@@ -73,18 +58,17 @@ cheb_1st <- function(x_axis, n){
 }
 
 
-##
 #' @title Generating Chebyshev Polynomials of second kind
-#' @param x_axis beliebigie X-Achse (Vektor)
-#' @param n Ordnung des Polynoms (Skalar)
-#' @return cheb_u Chebyshev-Polynome Zweiter Art (Vektor)
+#' @param x_axis Arbitrary x-axis
+#' @param n Order of the polynomial
+#' @return Chebyshev polynomials of the second kind
 #' @description
-#' cheb_2nd erzeugt Chebyshev Polynome zweiter Art aus beliebiger X-Achse
+#' \code{cheb_2nd} generates Chebyshev polynomials of the second kind of the 
+#'   order n from an arbitrary x-axis. Recurrence formula is taken from 
+#'   Bronstein p.xxx.
 #' @export
 cheb_2nd <- function(x_axis, n){
-  ## Funktion zur Erzeugung von Chebyshev-Polynomen Zweiter Art
-  ## ##
-  x_cheb <- if (length(x_axis) > 7) cheb_scale(x_axis) else x_axis
+  x_cheb <- cheb_scale(x_axis)
   m <- n + 1
   cheb_u_0 <- 1; cheb_u_1 <-  2*x_cheb
   cheb_u <- cbind(cheb_u_0, cheb_u_1)
@@ -99,17 +83,15 @@ cheb_2nd <- function(x_axis, n){
 }
 
 
-##
 #' @title Calculation of Values of the model fit
-#' @param x_axis beliebige X-Achse (Skalar oder Vektor)
-#' @param cheb_coeff Chebyshev-Koeffizienten aus Least-Squares-Verfahren (Vektor)
-#' @return cheb_model gefiltertes Modell (Skalar oder Vektor)
+#' @param x_axis Arbitrary x-axis or single value
+#' @param cheb_coeff Coefficients of the Least-Squares-Fit with Chebyshev
+#'   polynomials
+#' @return Filtered model (or single value)
 #' @description
-#' cheb_model berechnet aus den Chebyshev-Koeffizienten die Y-Werte
+#' \code{cheb_model} calculates filtered model values of arbitrary 
 #' @export
 cheb_model_filter <- function(x_axis, cheb_coeff) {
-  ## Funktion zur Berechnung der Y-Werte aus X-Stellen und Cheb-Koeffizienten
-  ## ##
   n <- length(cheb_coeff) - 1
   cheb_t <- cheb_1st(x_axis, n)
   cheb_model <- cheb_t %*% cheb_coeff
@@ -117,43 +99,43 @@ cheb_model_filter <- function(x_axis, cheb_coeff) {
 }
 
 
-##
 #' @title Calculation of the values of the first derivation
-#' @param x_axis beliebige X-Achse (Skalar oder Vektor)
-#' @param cheb_coeff Chebyshev-Koeffizienten aus Least-Squares-Verfahren (Vektor)
-#' @return cheb_model_deriv_1st Erste Ableitung des gefilterten Modells (Skalar oder Vektor)
+#' @param x_axis Arbitrary x-axis
+#' @param cheb_coeff Chebyshev-coefficients of the least squares model fit
+#' @return Values of the first derivation of the filtered 
+#'   model
 #' @description
-#' cheb_deriv_1st berechnet aus den Chebyshev-Koeffizienten die Werte der ersten Ableitung
+#' \code{cheb_deriv_1st} calculates values of the first derivation of the 
+#'   filtered model from the Chebyshev coefficients of the least squares fit on 
+#'   the original x-axis or single x-values.
 #' @export
 cheb_deriv_1st <- function(x_axis, cheb_coeff) {
-  ## Funktion zur Berechnung der Y-Werte der Ableitung des Modells
-  ## aus X-Stellen und Chebyshev-Koeffizienten
-  ## ##
-  if (length(x_axis) != 0) { ### ueberpruefen, ob noetig
-    n <- length(cheb_coeff) - 1
-    m <- n + 1
-    cheb_u <- cheb_2nd(x_axis, n)
-
-    # berechnung der ableitung der polynome erster art
-    # rekursionsformel 0
-    # dT/dx = n * U_(n-1)
-
-    cheb_t_deriv_1st <- if (length(x_axis) == 1) (1:n)*t(cheb_u[,1:n]) else t((1:n) * t(cheb_u[,1:n]))
-    cheb_t_deriv_1st <- cbind(0, cheb_t_deriv_1st)
-    cheb_model_deriv_1st <- cheb_t_deriv_1st %*% cheb_coeff
-
-    return(cheb_model_deriv_1st)
-  }
+  # if (length(x_axis) != 0) { ### ueberpruefen, ob noetig
+  n <- length(cheb_coeff) - 1
+  # m <- n + 1
+  cheb_u <- cheb_2nd(x_axis, n)
+  
+  # recurrence formula for first derivation of first kind chebyshev polynomials
+  # bronstein pp. 
+  # dT/dx = n * U_(n-1)
+  
+  cheb_t_deriv_1st <- if (length(x_axis) == 1) (1:n)*t(cheb_u[,1:n]) else t((1:n) * t(cheb_u[,1:n]))
+  cheb_t_deriv_1st <- cbind(0, cheb_t_deriv_1st)
+  cheb_model_deriv_1st <- cheb_t_deriv_1st %*% cheb_coeff
+  
+  return(cheb_model_deriv_1st)
+  # }
 }
 
 
-##
 #' @title Calculation of the values of the second derivation
-#' @param x_axis beliebige X-Achse (Skalar oder Vektor)
-#' @param cheb_coeff Chebyshev-Koeffizienten aus Least-Squares-Verfahren (Vektor)
-#' @return cheb_model_deriv Zweite Ableitung des gefilterten Modells (Skalar oder Vektor)
+#' @param x_axis Arbitrary X-Axis
+#' @param cheb_coeff Chebyshev-Coefficients
+#' @return Second Derivation of the filtered model
 #' @description
-#' cheb_deriv_2nd berechnet aus den Chebyshev-Koeffizienten die Werte der zweiten Ableitung
+#' \code{cheb_deriv_2nd} calculates values of the second derivation of the 
+#'   filtered model from the Chebyshev coefficients of the least squares fit on 
+#'   the original x-axis or single x-values.
 #' @export
 cheb_deriv_2nd <- function(x_axis, cheb_coeff) {
   n <- length(cheb_coeff) - 1
@@ -163,80 +145,83 @@ cheb_deriv_2nd <- function(x_axis, cheb_coeff) {
   cheb_u <- cheb_2nd(x_axis, n)
   x_cheb <- cheb_scale(x_axis)
 
+  # recurrence formula for first derivation of first kind chebyshev polynomials
+  # bronstein pp. 
+  # dT/dx = n * U_(n-1)
+  
   cheb_t_deriv_2nd <- t((0:n) * t(t((0:n + 1) * t(cheb_t )) - cheb_u)) / (x_cheb ** 2 - 1)
   cheb_t_deriv_2nd[1,] <- (-1) ** (0:n) * ((0:n) ** 4 - (0:n) ** 2) / (3)
   cheb_t_deriv_2nd[l,] <- ((0:n) ** 4 - (0:n) ** 2) / (3)
-
   cheb_model_deriv_2nd <- cheb_t_deriv_2nd %*% cheb_coeff
-
+  
   return(cheb_model_deriv_2nd)
 }
 
 
-##
 #' @title Curve Fitting with Chebyshev Polynomials
-#' @param d Zu fittender Datensatz/Zeitreihe (Vektor)
-#' @param x_axis Beliebige X-Achse (Vektor)
-#' @param n Ordnung des Polynoms (Skalar)
-#' @return cheb_model Werte des gefilterten Modells
+#' @param d Data series to be fitted
+#' @param x_axis Arbitrary X-Axis
+#' @param n Order of the polynomial
+#' @return Values of the filtered model
 #' @description
-#' \code{cheb_fit} fittet ein Chebyshev-Polynom beliebiger Ordnung an einen Datensatz/Zeitreihe mittels Least Squares Verfahren
+#' \code{cheb_fit} fits a Chebyshev polynomial of order n to a arbitrary data 
+#'   or time series using the method of least squares.
 #' @export
 cheb_fit <- function(d, x_axis, n){
-  ## Herausfiltern von fehlenden Werten (NAs)
+  ## Find missing values
   mss_ind  <- which(is.na(d))
 
-  # Fallunterscheidung fuer NAs im Datensatz
+  # case discrimination for missing values, that lead to errors.
   if (length(mss_ind) >= 1) {
     cheb_t <- cheb_1st(x_axis[-mss_ind], n)
   } else {
     cheb_t <- cheb_1st(x_axis, n)
   }
 
-  ## modell berechnungen
-  # berechnung der koeffizienten des polyfits
+  ## model calculations
+  # chebyshev polynomial coefficients
   if (length(mss_ind) >= 1) {
     cheb_coeff <- solve(t(cheb_t) %*% cheb_t) %*% t(cheb_t) %*% d[-mss_ind]
   } else {
     cheb_coeff <- solve(t(cheb_t) %*% cheb_t) %*% t(cheb_t) %*% d
   }
 
-  # berechnung des gefilterten modells
   x_cheb <- cheb_scale(x_axis)
   cheb_model <- cheb_model_filter(x_cheb, cheb_coeff)
 
-  # uebergabe der Variablen
   return(cheb_model)
 }
 
 
-##
 #' @title Curve Fitting with Chebyshev Polynomials and Finding of its Roots
-#' @param d Zu fittender Datensatz/Zeitreihe (Vektor)
-#' @param x_axis Beliebige X-Achse (Vektor)
-#' @param n Ordnung des Polynoms (Skalar)
-#' @param roots_bound_lower Unterer Rand des Bereichs der Nullstellensuche
-#' @param roots_bound_upper Oberer Rand des Bereichs der Nullstellensuche
-#' @return cheb_list Liste berechneter Parameter (Koeffizienten, gefiltertes Modell, erste und zweite Ableitung des gefilterten Modells, Extremstellen und -Werte)
+#' @param d Data series to be fitted
+#' @param x_axis Arbitrary x-axis
+#' @param n Order of the polynomial
+#' @param roots_bound_lower Lower boundary of the extreme value search
+#' @param roots_bound_upper Upper boundary of the extreme value search
+#' @return list of calculated parameters like Chebyshev coefficients,
+#'   values of the filtered model, values of the first and seconda derivation,
+#'   postitions and values of extremes
 #' @description
-#' \code{cheb_fit.extr} fittet ein Chebyshev-Polynom beliebiger Ordnung an einen Datensatz/Zeitreihe mittels Least Squares Verfahren
+#' \code{cheb_fit_extr} fits a Chebyshev polynomial of order n to a data series 
+#'   using the method of least squares and locates the extrema of the fit using 
+#'   the Newton-Raphson-algorithm.
 #' @export
 #' @importFrom rootSolve uniroot.all
-cheb_find_extr <- function(d, x_axis, n, roots_bound_lower = NA, roots_bound_upper = NA){
+cheb_find_extr <- function(d, x_axis, n, 
+                           roots_bound_lower = NA, roots_bound_upper = NA){
 
   x_cheb <- cheb_scale(x_axis)
   cheb_t <- cheb_1st(x_axis, n)
 
-  ## modell berechnungen
-  # berechnung der koeffizienten des polyfits
+  ## model calulations
+  # least squares formula // ###
   cheb_coeff <- solve(t(cheb_t) %*% cheb_t) %*% t(cheb_t) %*% d
 
-  # Berechnung der Extrema ueber Nullstellen der ersten Ableitung
+  # newton raphson method // package rootSolve
   extr <- uniroot.all(cheb_deriv_1st, cheb_coeff = cheb_coeff, lower = -1, upper = 1)
-  # reskalierung der Extrema auf normale Lat- Achse
   extr_x <- if (length(extr) != 0) cheb_rescale(extr, x_axis = x_axis)
 
-  # ueberpruefen, welche Extrema im gesuchten Bereich liegen
   if (!is.na(roots_bound_lower) | !is.na(roots_bound_upper)) {
     ind <- which(extr_x >= roots_bound_lower & extr_x <= roots_bound_upper)
     extr <- extr[ind]
@@ -252,45 +237,44 @@ cheb_find_extr <- function(d, x_axis, n, roots_bound_lower = NA, roots_bound_upp
 }
 
 
-##
 #' @title Routine to find maximum values of a curve
-#' @param d Zu fittender Datensatz
-#' @param x_axis beliebiege X-Achse
-#' @param n Ordnung des Skalars
-#' @param maxima_bound_lower Unterer Rand des Bereichs der Maxima-Suche
-#' @param maxima_bound_upper Oberer Rand des Bereichs der Maxima-Suche
-#' @return max_list Positionen und Werte der Maxima als Liste
+#' @param d Data series to be fitted
+#' @param x_axis Arbitrary x-axis
+#' @param n Order of the polynomial
+#' @param maxima_bound_lower Lower boundary of the maximum value search
+#' @param maxima_bound_upper Upper boundary of the maximum value search
+#' @return list of calculated parameters like Chebyshev coefficients,
+#'   values of the filtered model, values of the first and seconda derivation,
+#'   postitions and values of maxima
 #' @description
-#' \code{cheb_find_max} fittet ein Polynom und sucht mittel dessen Ableitung die Maxima des Datensatzes
+#' \code{cheb_find_max} fits a Chebyshev polynomial of order n to a data series 
+#'   using the method of least squares, locates the extrema of the fit using 
+#'   the Newton-Raphson-algorithm of the first derivation and checks for maxima 
+#'   using the second derivative.
 #' @export
 #' @importFrom rootSolve uniroot.all
 cheb_find_max <- function(d, x_axis, n, maxima_bound_lower = NA, maxima_bound_upper = NA){
   x_cheb <- cheb_scale(x_axis)
   cheb_t <- cheb_1st(x_axis, n)
 
-  ## modell berechnungen
-  # koeffizienten d poly fits
+  ## model calculations
+  # method least squares // formula: #### 
   cheb_coeff <- solve(t(cheb_t) %*% cheb_t) %*% t(cheb_t) %*% d
 
-  # berechnen d maxima
-  # nullstellen d ableitung
+  # newton raphson method // package rootSolve
   extr <- uniroot.all(cheb_deriv_1st, cheb_coeff = cheb_coeff, lower = -1, upper = 1)
-
-  # reskalierung der Extrema auf normale Lat- Achse
   extr_x <- cheb_rescale(extr, x_axis = x_axis)
 
-  # ueberpruefen, welche Extrema im gesuchten Bereich liegen
   if (!is.na(maxima_bound_lower) | !is.na(maxima_bound_upper)) {
     ind <- which(extr_x >= maxima_bound_lower & extr_x <= maxima_bound_upper)
     extr <- extr[ind]
     extr_x <- extr_x[ind]
   }
 
-  # ueberpruefen, welche Extrema Maxima sind
+  # check for extreme values
   if (length(extr) != 0) {
     extr_deriv_2nd <- cheb_deriv_2nd(x_axis = extr, cheb_coeff = cheb_coeff)
 
-    # filtern der maxima | wert d zweiten ableitung < 0
     ind_max <- which(extr_deriv_2nd < 0)
     if (length(ind_max) != 0) {
       max_x <- extr_x[ind_max]
@@ -305,8 +289,3 @@ cheb_find_max <- function(d, x_axis, n, maxima_bound_lower = NA, maxima_bound_up
                    max_y = max_y)
   return(max_list)
 }
-
-
-
-
-

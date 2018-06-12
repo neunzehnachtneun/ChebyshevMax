@@ -7,13 +7,14 @@
 cheb_model_filter(x_axis, cheb_coeff)
 }
 \arguments{
-\item{x_axis}{beliebige X-Achse (Skalar oder Vektor)}
+\item{x_axis}{Arbitrary x-axis or single value}
 
-\item{cheb_coeff}{Chebyshev-Koeffizienten aus Least-Squares-Verfahren (Vektor)}
+\item{cheb_coeff}{Coefficients of the Least-Squares-Fit with Chebyshev
+polynomials}
 }
 \value{
-cheb_model gefiltertes Modell (Skalar oder Vektor)
+Filtered model (or single value)
 }
 \description{
-cheb_model berechnet aus den Chebyshev-Koeffizienten die Y-Werte
+\code{cheb_model} calculates filtered model values of arbitrary
 }

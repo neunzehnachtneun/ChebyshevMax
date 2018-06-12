@@ -7,15 +7,16 @@
 cheb_fit(d, x_axis, n)
 }
 \arguments{
-\item{d}{Zu fittender Datensatz/Zeitreihe (Vektor)}
+\item{d}{Data series to be fitted}
 
-\item{x_axis}{Beliebige X-Achse (Vektor)}
+\item{x_axis}{Arbitrary X-Axis}
 
-\item{n}{Ordnung des Polynoms (Skalar)}
+\item{n}{Order of the polynomial}
 }
 \value{
-cheb_model Werte des gefilterten Modells
+Values of the filtered model
 }
 \description{
-\code{cheb_fit} fittet ein Chebyshev-Polynom beliebiger Ordnung an einen Datensatz/Zeitreihe mittels Least Squares Verfahren
+\code{cheb_fit} fits a Chebyshev polynomial of order n to a arbitrary data 
+  or time series using the method of least squares.
 }

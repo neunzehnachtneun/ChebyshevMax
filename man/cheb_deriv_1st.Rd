@@ -7,13 +7,16 @@
 cheb_deriv_1st(x_axis, cheb_coeff)
 }
 \arguments{
-\item{x_axis}{beliebige X-Achse (Skalar oder Vektor)}
+\item{x_axis}{Arbitrary x-axis}
 
-\item{cheb_coeff}{Chebyshev-Koeffizienten aus Least-Squares-Verfahren (Vektor)}
+\item{cheb_coeff}{Chebyshev-coefficients of the least squares model fit}
 }
 \value{
-cheb_model_deriv_1st Erste Ableitung des gefilterten Modells (Skalar oder Vektor)
+Values of the first derivation of the filtered 
+  model
 }
 \description{
-cheb_deriv_1st berechnet aus den Chebyshev-Koeffizienten die Werte der ersten Ableitung
+\code{cheb_deriv_1st} calculates values of the first derivation of the 
+  filtered model from the Chebyshev coefficients of the least squares fit on 
+  the original x-axis or single x-values.
 }

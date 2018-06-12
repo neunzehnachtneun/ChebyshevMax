@@ -7,13 +7,15 @@
 cheb_2nd(x_axis, n)
 }
 \arguments{
-\item{x_axis}{beliebigie X-Achse (Vektor)}
+\item{x_axis}{Arbitrary x-axis}
 
-\item{n}{Ordnung des Polynoms (Skalar)}
+\item{n}{Order of the polynomial}
 }
 \value{
-cheb_u Chebyshev-Polynome Zweiter Art (Vektor)
+Chebyshev polynomials of the second kind
 }
 \description{
-cheb_2nd erzeugt Chebyshev Polynome zweiter Art aus beliebiger X-Achse
+\code{cheb_2nd} generates Chebyshev polynomials of the second kind of the 
+  order n from an arbitrary x-axis. Recurrence formula is taken from 
+  Bronstein p.xxx.
 }

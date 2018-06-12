@@ -7,13 +7,15 @@
 cheb_deriv_2nd(x_axis, cheb_coeff)
 }
 \arguments{
-\item{x_axis}{beliebige X-Achse (Skalar oder Vektor)}
+\item{x_axis}{Arbitrary X-Axis}
 
-\item{cheb_coeff}{Chebyshev-Koeffizienten aus Least-Squares-Verfahren (Vektor)}
+\item{cheb_coeff}{Chebyshev-Coefficients}
 }
 \value{
-cheb_model_deriv Zweite Ableitung des gefilterten Modells (Skalar oder Vektor)
+Second Derivation of the filtered model
 }
 \description{
-cheb_deriv_2nd berechnet aus den Chebyshev-Koeffizienten die Werte der zweiten Ableitung
+\code{cheb_deriv_2nd} calculates values of the second derivation of the 
+  filtered model from the Chebyshev coefficients of the least squares fit on 
+  the original x-axis or single x-values.
 }

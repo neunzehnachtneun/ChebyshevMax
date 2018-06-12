@@ -7,19 +7,23 @@
 cheb_find_extr(d, x_axis, n, roots_bound_lower = NA, roots_bound_upper = NA)
 }
 \arguments{
-\item{d}{Zu fittender Datensatz/Zeitreihe (Vektor)}
+\item{d}{Data series to be fitted}
 
-\item{x_axis}{Beliebige X-Achse (Vektor)}
+\item{x_axis}{Arbitrary x-axis}
 
-\item{n}{Ordnung des Polynoms (Skalar)}
+\item{n}{Order of the polynomial}
 
-\item{roots_bound_lower}{Unterer Rand des Bereichs der Nullstellensuche}
+\item{roots_bound_lower}{Lower boundary of the extreme value search}
 
-\item{roots_bound_upper}{Oberer Rand des Bereichs der Nullstellensuche}
+\item{roots_bound_upper}{Upper boundary of the extreme value search}
 }
 \value{
-cheb_list Liste berechneter Parameter (Koeffizienten, gefiltertes Modell, erste und zweite Ableitung des gefilterten Modells, Extremstellen und -Werte)
+list of calculated parameters like Chebyshev coefficients,
+  values of the filtered model, values of the first and seconda derivation,
+  postitions and values of extremes
 }
 \description{
-\code{cheb_fit.extr} fittet ein Chebyshev-Polynom beliebiger Ordnung an einen Datensatz/Zeitreihe mittels Least Squares Verfahren
+\code{cheb_fit_extr} fits a Chebyshev polynomial of order n to a data series 
+  using the method of least squares and locates the extrema of the fit using 
+  the Newton-Raphson-algorithm.
 }

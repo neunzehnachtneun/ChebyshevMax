@@ -7,13 +7,15 @@
 cheb_1st(x_axis, n)
 }
 \arguments{
-\item{x_axis}{beliebige X-Achse (Vektor)}
+\item{x_axis}{Arbitrary x-axis}
 
-\item{n}{Ordnung des Polynoms (Skalar)}
+\item{n}{Order of the polynomial}
 }
 \value{
-cheb_t Chebyshev-Polynome Erster Art (Vektor)
+Chebyshev polynomial of the first kind
 }
 \description{
-cheb_1st erzeugt Chebyshev Polynome erster Art aus beliebiger X-Achse
+\code{cheb_1st} generates Chebyshev polynomials of the first kind of the 
+  order n from an arbitrary x-axis. Recurrence formula is taken from 
+  Bronstein p.xxx.
 }

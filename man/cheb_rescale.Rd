@@ -2,18 +2,19 @@
 % Please edit documentation in R/functions-chebyshev.r
 \name{cheb_rescale}
 \alias{cheb_rescale}
-\title{Rescaling of X-Axis (as vector or as scalar)}
+\title{Rescaling of X-Axis to Original X-Axis}
 \usage{
 cheb_rescale(x_cheb, x_axis)
 }
 \arguments{
-\item{x_cheb}{skalierte X-Achse (Skalar oder Vektor)}
+\item{x_cheb}{Scaled x-axis}
 
-\item{x_axis}{beliebige X-Achse (Vektor)}
+\item{x_axis}{Unscaled x-axis}
 }
 \value{
-x_rescaled reskalierte X-Achse (Skalar oder Sektor)
+Rescaled x-axis
 }
 \description{
-cheb_rescale reskaliert die fuer den Fit erzeugte Achse auf die Urspruengliche
+\code{cheb_rescale} rescales (single or multiple) values in the range [-1,1] 
+to the original x-axis.
 }
